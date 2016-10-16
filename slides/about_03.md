@@ -1,9 +1,26 @@
 
 ## `activejob-cancel`
 
-* `cancel`メソッドはActive Jobが発番しているジョブIDを使用するようにしている
-* Active Jobが発番しているIDではなく、queuing system(`Sidekiq`、`DelayedJob`)が返すIDを使用したい場合は、`cancel_by`メソッドを使う必要がある
+* キャンセル用(`cancel`)のメソッドをJob Classに追加している
+  * クラスメソッドインスタントメソッド両方追加している
 
 ```ruby
-HelloJob.cancel_by(provider_job_id: job.provider_job_id)
+# app/jobs/hello_job.rb
+class HelloJob < ActiveJob::Base
+  def perform
+  end
+end
 ```
+
+```ruby
+job = HelloJob.perform_later
+job.cancel
+```
+
+or
+
+```ruby
+job = HelloJob.perform_later
+HelloJob.cancel(job.job_id)
+```
+

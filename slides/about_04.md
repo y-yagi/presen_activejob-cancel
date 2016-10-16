@@ -1,7 +1,9 @@
 
-## 補足
+## `activejob-cancel`
 
-* Active Jobにおける"ジョブID"とは、Active Job内で発番しているIDの事
-  * `SecureRandom.uuid`メソッドを使って発番している(UUID version 4）
-  * 厳密には衝突の可能性がある
-* それとは別に、queuing systemによってはqueuing system側でIDを発番している(`Sidekiq`、`DelayedJob`等)
+* `cancel`メソッドはActive Jobが発番しているジョブIDを使用するようにしている
+* Active Jobが発番しているIDではなく、queuing system(`Sidekiq`、`DelayedJob`)が返すIDを使用したい場合は、`cancel_by`メソッドを使う必要がある
+
+```ruby
+HelloJob.cancel_by(provider_job_id: job.provider_job_id)
+```
